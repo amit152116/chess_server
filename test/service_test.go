@@ -8,17 +8,17 @@ import (
 )
 
 func TestRegisterUser(t *testing.T) {
-	t.Run("Test Register User", func(t *testing.T) {
+	t.Run("Test Register DBUser", func(t *testing.T) {
 		user := models.RegisterUserPayload{
-			"test",
-			"test",
-			"test",
-			"test",
-			"test",
+			Username:  "test",
+			Password:  "test",
+			Email:     "test",
+			FirstName: "test",
+			LastName:  "test",
 		}
 		_, err := services.RegisterUser(&user)
 		if err != nil {
-			t.Errorf("Error in Register User")
+			t.Errorf("Error in Register DBUser")
 		}
 
 		uid, err := services.AuthenticateUser(&models.LoginUserPayload{

@@ -1,9 +1,11 @@
 package services
 
 import (
+	"fmt"
 	"github.com/Amit152116Kumar/chess_server/db"
 	"github.com/Amit152116Kumar/chess_server/models"
 	"github.com/Amit152116Kumar/chess_server/myErrors"
+	"github.com/Amit152116Kumar/chess_server/redis"
 	"github.com/Amit152116Kumar/chess_server/utils"
 	"github.com/google/uuid"
 )
@@ -24,7 +26,11 @@ func RegisterUser(user *models.RegisterUserPayload) (uuid.UUID, error) {
 		return uuid.Nil, myErrors.UserAlreadyExists
 	}
 	session := models.NewSession(user.Email, utils.RoleUser)
-	models.Sessions[session.UID] = session
+	result, err := redis.Client.HSet(redis.Ctx, session.UID.String(), session).Result()
+	if err != nil {
+		return uuid.Nil, err
+	}
+	fmt.Println(result)
 	return session.UID, nil
 }
 
@@ -36,22 +42,33 @@ func AuthenticateUser(user *models.LoginUserPayload) (uuid.UUID, error) {
 	}
 
 	session := models.NewSession(user.Email, utils.RoleUser)
-	models.Sessions[session.UID] = session
+	result, err := redis.Client.HSet(redis.Ctx, session.UID.String(), session).Result()
+	if err != nil {
+		return uuid.Nil, err
+	}
+	fmt.Println(result)
 	return session.UID, nil
 }
 
 func RefreshToken(uid string) uuid.UUID {
 	key := uuid.MustParse(uid)
-	session := models.Sessions[key]
-
+	var session models.Session
+	err := redis.Client.HGetAll(redis.Ctx, key.String()).Scan(&session)
+	if err != nil {
+		fmt.Println(err)
+		return uuid.Nil
+	}
 	newUid := uuid.New()
-
 	session.Refresh(newUid)
 	return newUid
 }
 
 func Guest() uuid.UUID {
 	session := models.NewSession("guest", utils.RoleGuest)
-	models.Sessions[session.UID] = session
+	result, err := redis.Client.HSet(redis.Ctx, session.UID.String(), session).Result()
+	if err != nil {
+		return uuid.Nil
+	}
+	fmt.Println(result)
 	return session.UID
 }

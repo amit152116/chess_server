@@ -98,3 +98,12 @@ func EmailValidation(email string) bool {
 
 	return re.MatchString(email)
 }
+
+func LengthToBytes(length int) []byte {
+	lengthBytes := []byte{byte(length >> 8), byte(length & 0xFF)}
+	return lengthBytes
+}
+
+func BytesToLength(bytes []byte) uint16 {
+	return uint16(bytes[0])<<8 | uint16(bytes[1])
+}

@@ -1,53 +1,49 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/Amit152116Kumar/chess_server/utils"
-	"io"
+	"github.com/joho/godotenv"
 	"os"
 )
 
-type DbConfig struct {
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Host     string `json:"host"`
-	Port     int    `json:"port"`
-	DBName   string `json:"dbname"`
-	SSLMode  string `json:"sslmode"`
+type Configs struct {
+	DBUser        string
+	DBPassword    string
+	DBHost        string
+	DBPort        string
+	DBName        string
+	SSLMode       string
+	RedisHost     string
+	RedisPort     string
+	RedisPassword string
 }
 
-func (a *DbConfig) SetSSLMode(sslMode utils.SSLMode) {
+func (a *Configs) SetSSLMode(sslMode utils.SSLMode) {
 	a.SSLMode = sslMode.String()
 }
-func (a *DbConfig) GetConnectionString() string {
-	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
-		a.Host, a.Port, a.User, a.Password, a.DBName, a.SSLMode)
+func (a *Configs) GetConnectionString() string {
+	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		a.DBHost, a.DBPort, a.DBUser, a.DBPassword, a.DBName, a.SSLMode)
 }
 
-var Cfg = &DbConfig{}
+var Cfg *Configs
 
-func LoadConfig(postgresProvider string) error {
-	file, err := os.Open("config.json")
-	if err != nil {
-		return err
-	}
-	defer file.Close()
+func LoadConfig() error {
 
-	var jsonData []byte
-	if jsonData, err = io.ReadAll(file); err != nil {
+	if err := godotenv.Load(); err != nil {
 		return err
 	}
 
-	var data map[string]json.RawMessage
-	if err = json.Unmarshal(jsonData, &data); err != nil {
-		return err
+	Cfg = &Configs{
+		DBUser:        os.Getenv("DB_USER"),
+		DBPassword:    os.Getenv("DB_PASSWORD"),
+		DBHost:        os.Getenv("DB_HOST"),
+		DBPort:        os.Getenv("DB_PORT"),
+		DBName:        os.Getenv("DB_NAME"),
+		RedisHost:     os.Getenv("REDIS_HOST"),
+		RedisPort:     os.Getenv("REDIS_PORT"),
+		RedisPassword: os.Getenv("REDIS_PASSWORD"),
 	}
-
-	postgres := DbConfig{}
-	if err = json.Unmarshal(data[postgresProvider], &postgres); err != nil {
-		return err
-	}
-	*Cfg = postgres
 	return nil
 }

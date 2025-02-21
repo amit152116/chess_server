@@ -1,12 +1,6 @@
 package db
 
-import (
-	"database/sql"
-	"log"
-)
-
-func createUsersTable(db *sql.DB) {
-	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS Users (
+const UserTable = `CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY ,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
@@ -16,18 +10,10 @@ func createUsersTable(db *sql.DB) {
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     avatar_url VARCHAR(255) ,
-    bio TEXT);`)
+    bio TEXT);`
 
-	if err != nil {
-		log.Panicln("Create USER Table: ", err)
-
-	}
-
-}
-
-func createTimeControlTable(db *sql.DB) {
-	_, err := db.Exec(`BEGIN TRANSACTION;
-					CREATE TABLE IF NOT EXISTS TimeControls (
+const TimeControlTable = `BEGIN TRANSACTION;
+					CREATE TABLE IF NOT EXISTS timecontrols (
 						id SMALLSERIAL PRIMARY KEY,
 						name VARCHAR(10) UNIQUE NOT NULL
 					);
@@ -40,45 +26,26 @@ func createTimeControlTable(db *sql.DB) {
 					SELECT 'rapid' WHERE NOT EXISTS (SELECT 1 FROM TimeControls WHERE name = 'rapid')
 					UNION ALL 
 					SELECT 'classical' WHERE NOT EXISTS (SELECT 1 FROM TimeControls WHERE name = 'classical');
-					COMMIT;`)
+					COMMIT;`
 
-	if err != nil {
-		log.Panicln("Create TIME CONTROL Table: ", err)
-		return
-	}
-}
-
-func createRatingsTable(db *sql.DB) {
-	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS Ratings (
+const RatingsTable = `CREATE TABLE IF NOT EXISTS ratings (
     id SERIAL PRIMARY KEY,
     user_id SERIAL NOT NULL,
     bullet INT DEFAULT 1200,
     blitz INT DEFAULT 1200,
     rapid INT DEFAULT 1200,
     classical INT DEFAULT 1200,
-    FOREIGN KEY (user_id) REFERENCES Users(id));`)
+    FOREIGN KEY (user_id) REFERENCES Users(id));`
 
-	if err != nil {
-		log.Panicln("Create RATING Table: ", err)
-		return
-	}
-}
-
-func createSessionsTable(db *sql.DB) {
-	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS Sessions (
+const SessionTable = `CREATE TABLE IF NOT EXISTS sessions (
     id SERIAL PRIMARY KEY,
     user_id SERIAL UNIQUE REFERENCES Users(id),
     session_token UUID UNIQUE NOT NULL,
-    expires_at TIMESTAMP NOT NULL);`)
+    expires_at TIMESTAMP NOT NULL);`
 
-	if err != nil {
-		log.Panicln("Create SESSION Table: ", err)
-		return
-	}
-}
-
-func createGamesTable(db *sql.DB) {
-	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS Games (
+const (
+	GamesTable_IDX1 = `CREATE INDEX games_idx on games(white_id,black_id)`
+	GamesTable      = `CREATE TABLE IF NOT EXISTS games (
     id UUID PRIMARY KEY,
     white_id SERIAL NOT NULL,
     black_id SERIAL NOT NULL,
@@ -91,16 +58,10 @@ func createGamesTable(db *sql.DB) {
 	FOREIGN KEY (white_id) REFERENCES Users(id),
     FOREIGN KEY (black_id) REFERENCES Users(id),
 	FOREIGN KEY (time_control_id) REFERENCES TimeControls(id),
-    FOREIGN KEY (winner_id) REFERENCES Users(id));`)
+    FOREIGN KEY (winner_id) REFERENCES Users(id));`
+)
 
-	if err != nil {
-		log.Panicln("Create GAME Table: ", err)
-		return
-	}
-}
-
-func createMovesTable(db *sql.DB) {
-	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS Moves (
+const MovesTable = `CREATE TABLE IF NOT EXISTS moves (
     id SERIAL PRIMARY KEY,
     game_id UUID NOT NULL,
     player_id SERIAL NOT NULL,
@@ -108,53 +69,50 @@ func createMovesTable(db *sql.DB) {
     move VARCHAR(5) NOT NULL,
     move_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (game_id) REFERENCES Games(id) ON DELETE CASCADE,
-    FOREIGN KEY (player_id) REFERENCES Users(id));`)
-	if err != nil {
-		log.Panicln("Create MOVE Table: ", err)
-		return
-	}
-}
+    FOREIGN KEY (player_id) REFERENCES Users(id));`
 
-func createMatchmakingQueue(db *sql.DB) {
-	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS MatchmakingQueue (
+const PairingQueue = `CREATE TABLE IF NOT EXISTS pairingqueue (
 	id SERIAL PRIMARY KEY,
     user_id SERIAL NOT NULL,
     time_control_id INTEGER NOT NULL,
     requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (time_control_id) REFERENCES TimeControls(id),
-    FOREIGN KEY (user_id) REFERENCES Users(id));`)
+    FOREIGN KEY (user_id) REFERENCES Users(id));`
 
-	if err != nil {
-		log.Panicln("Create MATCHMAKING QUEUE Table: ", err)
-		return
-	}
-}
-
-func createChatMessagesTable(db *sql.DB) {
-	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS Chats (
+const ChatTable = `CREATE TABLE IF NOT EXISTS chats (
     id SERIAL PRIMARY KEY,
     game_id UUID NOT NULL,
     sender_id SERIAL NOT NULL,
     message TEXT NOT NULL,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (game_id) REFERENCES Games(id),
-    FOREIGN KEY (sender_id) REFERENCES Users(id));`)
-	if err != nil {
-		log.Panicln("Create CHAT MESSAGE Table: ", err)
-		return
-	}
-}
-func createFriendsTable(db *sql.DB) {
-	_, err := db.Exec(`CREATE TABLE IF NOT EXISTS	Friends (
+    FOREIGN KEY (sender_id) REFERENCES Users(id));`
+
+const FriendsTable = `CREATE TABLE IF NOT EXISTS	friends (
     user_id SERIAL NOT NULL,
     friend_id SERIAL NOT NULL,
     status VARCHAR(10) NOT NULL CHECK (status IN ('pending', 'accepted')) DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, friend_id),
     FOREIGN KEY (user_id) REFERENCES Users(id),
-    FOREIGN KEY (friend_id) REFERENCES Users(id));`)
-	if err != nil {
-		log.Panicln("Create FRIENDS Table: ", err)
-		return
-	}
-}
+    FOREIGN KEY (friend_id) REFERENCES Users(id));`
+
+const OngoingGamesTable = `CREATE VIEW ongoinggames AS
+	SELECT 
+		g.id AS game_id,
+		g.start_time,
+		p1.username AS player1,
+		p2.username AS player2,
+		tc.name AS time_control
+	FROM 
+		Games g
+	JOIN 
+		Users p1 ON g.white_id = p1.id
+	JOIN 
+		Users p2 ON g.black_id = p2.id
+	JOIN 
+		TimeControls tc ON g.time_control_id = tc.id
+	WHERE 
+		g.status = 'in_progress'
+	ORDER BY 
+		g.start_time DESC;`

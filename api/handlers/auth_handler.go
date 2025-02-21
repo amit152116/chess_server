@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"github.com/Amit152116Kumar/chess_server/models"
+	"github.com/Amit152116Kumar/chess_server/redis"
 	"github.com/Amit152116Kumar/chess_server/services"
 	"github.com/Amit152116Kumar/chess_server/utils"
 	"github.com/gin-gonic/gin"
@@ -24,7 +25,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	writeHeader(c, uid.String())
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "User authenticated successfully"})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "DBUser authenticated successfully"})
 }
 
 func Register(c *gin.Context) {
@@ -38,11 +39,11 @@ func Register(c *gin.Context) {
 
 	uid, err := services.RegisterUser(&user)
 	if err != nil {
-		c.IndentedJSON(http.StatusConflict, gin.H{"error": err.Error(), "message": "User already exists", "user": user})
+		c.IndentedJSON(http.StatusConflict, gin.H{"error": err.Error(), "message": "DBUser already exists", "user": user})
 		return
 	}
 	writeHeader(c, uid.String())
-	c.IndentedJSON(http.StatusCreated, gin.H{"message": "User created successfully"})
+	c.IndentedJSON(http.StatusCreated, gin.H{"message": "DBUser created successfully"})
 }
 
 func writeHeader(c *gin.Context, sessionId string) {
@@ -66,6 +67,11 @@ func RefreshToken(c *gin.Context) {
 func Logout(c *gin.Context) {
 	sessionId := c.Request.Header.Get("session-id")
 	uid := uuid.MustParse(sessionId)
-	delete(models.Sessions, uid)
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "User logged out successfully"})
+	result, err := redis.Client.HDel(redis.Ctx, uid.String()).Result()
+	if err != nil {
+		c.IndentedJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	fmt.Println(result)
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "DBUser logged out successfully"})
 }

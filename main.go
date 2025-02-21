@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	err := config.LoadConfig("local")
+	err := config.LoadConfig()
 	if err != nil {
 		log.Panicln("connectToDB: ", err)
 	}

@@ -5,8 +5,8 @@ import (
 	"github.com/google/uuid"
 )
 
-func CreateGame(timeControl *models.NewGame) uuid.UUID {
+func CreateGame(timeControl *models.NewGameReqParam) uuid.UUID {
 	uid, _ := uuid.NewV7()
-	
+
 	return uid
 }

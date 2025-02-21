@@ -1,13 +1,18 @@
 package websocket
 
 import (
-	"github.com/gorilla/websocket"
+	"fmt"
 	"log"
+	"os"
+
+	"github.com/Amit152116Kumar/chess_server/movegen"
+	"github.com/gorilla/websocket"
 )
 
 type Client struct {
-	hub  *Hub
-	conn *websocket.Conn
+	hub   *Hub
+	conn  *websocket.Conn
+	color movegen.Color
 }
 
 func (c *Client) Read() {
@@ -22,7 +27,8 @@ func (c *Client) Read() {
 			}
 			break
 		}
-		c.hub.Broadcast(msg, c)
+		fmt.Fprintf(os.Stdout, "websocket msg from client color %s, --> %s", c.color.Name(), msg)
+		c.hub.processRequestPacket(msg, c)
 	}
 }
 

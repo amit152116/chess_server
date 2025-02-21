@@ -8,20 +8,20 @@ import (
 type RegisterUserPayload struct {
 	Username  string `json:"username" binding:"required" form:"username"`
 	Password  string `json:"password" binding:"required" form:"password"`
-	Email     string `json:"email" binding:"required" form:"email"`
+	Email     string `json:"Email" binding:"required" form:"Email"`
 	FirstName string `json:"first_name" binding:"required" form:"first_name"`
 	LastName  string `json:"last_name" binding:"required" form:"last_name"`
 }
 
 type LoginUserPayload struct {
-	Email    string `json:"email" binding:"required" form:"email"`
+	Email    string `json:"Email" binding:"required" form:"Email"`
 	Password string `json:"password" binding:"required" form:"password"`
 }
 
 type User struct {
 	ID           uuid.UUID `json:"id"`
 	Username     string    `json:"username"`
-	Email        string    `json:"email"`
+	Email        string    `json:"Email"`
 	AvatarURL    string    `json:"avatar_url"`
 	Bio          string    `json:"bio"`
 	CreatedAt    time.Time `json:"created_at"`

@@ -20,13 +20,13 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "User updated", "user": user})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "DBUser updated", "user": user})
 
 }
 
 func GetUser(c *gin.Context) {
 
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "User found"})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "DBUser found"})
 }
 
 func GetGamesForUser(c *gin.Context) {
@@ -36,5 +36,5 @@ func GetGamesForUser(c *gin.Context) {
 
 func DeleteUser(c *gin.Context) {
 
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "User deleted"})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "DBUser deleted"})
 }

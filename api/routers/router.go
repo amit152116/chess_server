@@ -1,17 +1,20 @@
 package routers
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // todo make the connection secure with jwt or sessions
 
-func SetupRouter() *gin.Engine {
+func SetupAllRoutes() *gin.Engine {
+	gin.SetMode(gin.DebugMode)
 	r := gin.Default()
 
-	//r.Use(gin.LoggerWithFormatter(middleware.LoggerFormatter))
+	// r.Use(gin.LoggerWithFormatter(middleware.LoggerFormatter))
 
+	// r.Use(middleware.CORSMiddleware())
 	homeRouter(r)
 	userRouter(r)
 	gameRouter(r)

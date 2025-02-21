@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/Amit152116Kumar/chess_server/utils"
 	"time"
+
+	"github.com/Amit152116Kumar/chess_server/utils"
 )
 
 type Game struct {
@@ -24,6 +25,9 @@ type Move struct {
 	MoveTime   time.Time `json:"move_time"`
 }
 
-type NewGame struct {
+type NewGameReqParam struct {
 	TimeControl utils.TimeControl `json:"time_control" form:"time_control" binding:"required"`
+	Time        int               `json:"time" form:"time" binding:"required" `
+	Increment   int               `json:"increment" form:"increment" binding:"required"`
+	IsRandom    string            `json:"is_random" form:"is_random" `
 }

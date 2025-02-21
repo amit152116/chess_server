@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/Amit152116Kumar/chess_server/models"
 	"github.com/Amit152116Kumar/chess_server/myErrors"
+	"github.com/Amit152116Kumar/chess_server/redis"
 	"github.com/Amit152116Kumar/chess_server/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -23,9 +24,10 @@ func AuthenticationMiddleware() gin.HandlerFunc {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": myErrors.InvalidSession.Error()})
 			return
 		}
-		session, ok := models.Sessions[uid]
-		if !ok || !session.IsValid() {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": myErrors.SessionExpired.Error()})
+		var session models.Session
+		err = redis.Client.HGetAll(redis.Ctx, uid.String()).Scan(&session)
+		if err != nil || !session.IsValid() {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": myErrors.InvalidSession.Error()})
 			return
 		}
 		c.Set("session", session)

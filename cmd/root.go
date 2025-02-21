@@ -1,13 +1,15 @@
 package cmd
 
 import (
-	"github.com/Amit152116Kumar/chess_server/api/routers"
-	"github.com/Amit152116Kumar/chess_server/db"
 	"log"
 	_ "net/http/pprof"
 	"os"
 	"runtime"
 	"time"
+
+	"github.com/Amit152116Kumar/chess_server/api/routers"
+	"github.com/Amit152116Kumar/chess_server/db"
+	"github.com/Amit152116Kumar/chess_server/redis"
 )
 
 func connectToDB() func() {
@@ -17,15 +19,14 @@ func connectToDB() func() {
 }
 
 func runServer() {
-	file, _ := os.OpenFile("gin.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, _ := os.OpenFile("gin.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o666)
 	defer file.Close()
 
-	r := routers.SetupRouter()
-	if err := r.Run(":8080"); err != nil {
+	r := routers.SetupAllRoutes()
+	if err := r.Run(":8000"); err != nil {
 		log.Println("router.Run(): ", err)
 		return
 	}
-
 }
 
 func profiler() {
@@ -42,8 +43,8 @@ func Execute() {
 		}
 	}()
 
-	var closeDB = connectToDB()
+	closeDB := connectToDB()
 	defer closeDB()
+	redis.ConfigureRedis()
 	runServer()
-
 }

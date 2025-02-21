@@ -19,3 +19,7 @@ var Unauthorized = errors.New("token: unauthorized")
 var Forbidden = errors.New("token: forbidden")
 
 var InvalidEmail = errors.New("token: invalid email")
+
+var InvalidFen = errors.New("invalid FEN")
+
+var ErrBodyLenTooLarge = errors.New("protocol.Header: Body Length is Larger than 2 Byte")

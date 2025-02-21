@@ -7,12 +7,12 @@ import (
 )
 
 func authRouter(r *gin.Engine) {
-	authGroup := r.Group("/", middleware.RateLimiter())
+	authGroup := r.Group("/")
 	{
 		authGroup.POST("/login", handlers.Login)
 		authGroup.POST("/register", handlers.Register)
 		authGroup.GET("/guest", handlers.Guest)
-		authGroup.GET("/logout", handlers.Logout)
+		authGroup.GET("/logout", middleware.AuthorizationMiddleware(), handlers.Logout)
 		authGroup.GET("/refresh", middleware.AuthenticationMiddleware(), handlers.RefreshToken)
 
 	}
