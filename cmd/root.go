@@ -7,9 +7,9 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/Amit152116Kumar/chess_server/api/routers"
-	"github.com/Amit152116Kumar/chess_server/db"
-	"github.com/Amit152116Kumar/chess_server/redis"
+	"github.com/amit152116/chess_server/api/routers"
+	"github.com/amit152116/chess_server/db"
+	"github.com/amit152116/chess_server/redis"
 )
 
 func connectToDB() func() {

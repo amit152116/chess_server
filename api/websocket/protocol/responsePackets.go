@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Amit152116Kumar/chess_server/movegen"
-	"github.com/Amit152116Kumar/chess_server/utils"
+	"github.com/amit152116/chess_server/movegen"
+	"github.com/amit152116/chess_server/utils"
 )
 
 type ResponsePacket interface {

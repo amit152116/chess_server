@@ -1,20 +1,20 @@
 package middleware
 
 import (
-	"github.com/Amit152116Kumar/chess_server/models"
-	"github.com/Amit152116Kumar/chess_server/myErrors"
-	"github.com/Amit152116Kumar/chess_server/redis"
-	"github.com/Amit152116Kumar/chess_server/utils"
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"net/http"
 	"strings"
+
+	"github.com/amit152116/chess_server/models"
+	"github.com/amit152116/chess_server/myErrors"
+	"github.com/amit152116/chess_server/redis"
+	"github.com/amit152116/chess_server/utils"
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func AuthenticationMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cookie, err := c.Cookie("session-id")
-
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": myErrors.SessionMissing.Error()})
 			return
@@ -62,10 +62,8 @@ func WSValidationMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
 		_, err := uuid.Parse(id)
-
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
-
 	}
 }

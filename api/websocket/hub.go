@@ -1,8 +1,8 @@
 package websocket
 
 import (
-	"github.com/Amit152116Kumar/chess_server/api/websocket/protocol"
-	"github.com/Amit152116Kumar/chess_server/movegen"
+	"github.com/amit152116/chess_server/api/websocket/protocol"
+	"github.com/amit152116/chess_server/movegen"
 	"github.com/google/uuid"
 )
 

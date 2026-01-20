@@ -2,9 +2,10 @@ package test
 
 import (
 	"fmt"
-	"github.com/Amit152116Kumar/chess_server/models"
-	"github.com/Amit152116Kumar/chess_server/services"
 	"testing"
+
+	"github.com/amit152116/chess_server/models"
+	"github.com/amit152116/chess_server/services"
 )
 
 func TestRegisterUser(t *testing.T) {
@@ -28,6 +29,5 @@ func TestRegisterUser(t *testing.T) {
 			fmt.Println(err.Error())
 		}
 		fmt.Println(uid)
-
 	})
 }

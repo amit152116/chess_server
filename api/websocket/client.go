@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/Amit152116Kumar/chess_server/movegen"
+	"github.com/amit152116/chess_server/movegen"
 	"github.com/gorilla/websocket"
 )
 

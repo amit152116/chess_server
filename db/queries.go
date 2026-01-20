@@ -1,8 +1,8 @@
 package db
 
 import (
-	"github.com/Amit152116Kumar/chess_server/models"
-	"github.com/Amit152116Kumar/chess_server/utils"
+	"github.com/amit152116/chess_server/models"
+	"github.com/amit152116/chess_server/utils"
 	"github.com/google/uuid"
 )
 
@@ -27,7 +27,6 @@ func (db *Database) GetGameDetails(gameID int) (models.Game, error) {
 	err := db.conn.QueryRow(`SELECT white_id, black_id, time_control_id, start_time FROM Games WHERE id = ?;`, gameID).Scan(
 		&game.WhitePlayerID, &game.BlackPlayerID, &game.TimeControl, &game.StartTime, &game.EndTime, &game.Status, &game.WinnerID)
 	return game, err
-
 }
 
 func (db *Database) GetOngoingGameID(whitePlayer, blackPlayer string) (int, error) {
@@ -116,18 +115,16 @@ func (db *Database) GetUserGameHistory(userID int) ([]models.Game, error) {
 }
 
 func (db *Database) GetUserStats(user models.User) (models.Stats, error) {
-	var stats = models.Stats{UserDetails: user}
+	stats := models.Stats{UserDetails: user}
 
 	err := db.conn.QueryRow(`SELECT bullet, blitz, rapid, classical FROM Ratings WHERE user_id = ?;`,
 		user.ID).Scan(
 		&stats.Bullet, &stats.Blitz, &stats.Rapid, &stats.Classical)
-
 	if err != nil {
 		return stats, err
 	}
 	err = db.conn.QueryRow(`SELECT COUNT(*) FROM Games WHERE (white_id = ? OR black_id = ?) AND status = ?;`,
 		user.ID, user.ID, utils.GameStatusFinished.String()).Scan(&stats.TotalGames)
-
 	if err != nil {
 		return stats, err
 	}
@@ -139,7 +136,6 @@ func (db *Database) GetUserStats(user models.User) (models.Stats, error) {
 
 	err = db.conn.QueryRow(`SELECT COUNT(*) FROM Games WHERE (white_id = ? OR black_id = ?) AND status = ? AND winner_id != ?;`,
 		user.ID, user.ID, utils.GameStatusFinished.String(), user.ID).Scan(&stats.Losses)
-
 	if err != nil {
 		return stats, err
 	}

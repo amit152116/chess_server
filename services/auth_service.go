@@ -2,11 +2,12 @@ package services
 
 import (
 	"fmt"
-	"github.com/Amit152116Kumar/chess_server/db"
-	"github.com/Amit152116Kumar/chess_server/models"
-	"github.com/Amit152116Kumar/chess_server/myErrors"
-	"github.com/Amit152116Kumar/chess_server/redis"
-	"github.com/Amit152116Kumar/chess_server/utils"
+
+	"github.com/amit152116/chess_server/db"
+	"github.com/amit152116/chess_server/models"
+	"github.com/amit152116/chess_server/myErrors"
+	"github.com/amit152116/chess_server/redis"
+	"github.com/amit152116/chess_server/utils"
 	"github.com/google/uuid"
 )
 
@@ -35,7 +36,6 @@ func RegisterUser(user *models.RegisterUserPayload) (uuid.UUID, error) {
 }
 
 func AuthenticateUser(user *models.LoginUserPayload) (uuid.UUID, error) {
-
 	hash, err := dbInstance.GetPassword(user.Email)
 	if err != nil || !utils.CheckPasswordHash(user.Password, hash) {
 		return uuid.Nil, myErrors.InvalidCredentials

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Amit152116Kumar/chess_server/models"
-	"github.com/Amit152116Kumar/chess_server/services"
+	"github.com/amit152116/chess_server/models"
+	"github.com/amit152116/chess_server/services"
 	"github.com/gin-gonic/gin"
 )
 

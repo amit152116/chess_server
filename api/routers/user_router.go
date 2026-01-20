@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"github.com/Amit152116Kumar/chess_server/api/handlers"
-	"github.com/Amit152116Kumar/chess_server/api/middleware"
+	"github.com/amit152116/chess_server/api/handlers"
+	"github.com/amit152116/chess_server/api/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,5 +15,4 @@ func userRouter(r *gin.Engine) {
 		userGroup.GET("/games", handlers.GetGamesForUser)
 
 	}
-
 }

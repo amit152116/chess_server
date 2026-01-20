@@ -3,7 +3,7 @@ package protocol
 import (
 	"fmt"
 
-	"github.com/Amit152116Kumar/chess_server/movegen"
+	"github.com/amit152116/chess_server/movegen"
 )
 
 type RequestPacket interface {

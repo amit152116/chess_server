@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/Amit152116Kumar/chess_server/models"
+	"github.com/amit152116/chess_server/models"
 	"github.com/google/uuid"
 )
 

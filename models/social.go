@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/Amit152116Kumar/chess_server/utils"
 	"time"
+
+	"github.com/amit152116/chess_server/utils"
 )
 
 type ChatMessage struct {

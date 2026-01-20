@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"github.com/Amit152116Kumar/chess_server/api/handlers"
-	"github.com/Amit152116Kumar/chess_server/api/middleware"
+	"github.com/amit152116/chess_server/api/handlers"
+	"github.com/amit152116/chess_server/api/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,5 +16,4 @@ func adminRoute(r *gin.Engine) {
 		adminGroup.GET("/logout", handlers.Logout)
 		adminGroup.GET("/refresh", handlers.RefreshToken)
 	}
-
 }

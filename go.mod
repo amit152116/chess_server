@@ -1,4 +1,4 @@
-module github.com/Amit152116Kumar/chess_server
+module github.com/amit152116/chess_server
 
 go 1.23.0
 

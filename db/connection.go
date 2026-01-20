@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Amit152116Kumar/chess_server/config"
+	"github.com/amit152116/chess_server/config"
 	_ "github.com/lib/pq"
 )
 

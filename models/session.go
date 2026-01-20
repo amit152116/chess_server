@@ -1,9 +1,10 @@
 package models
 
 import (
-	"github.com/Amit152116Kumar/chess_server/utils"
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/amit152116/chess_server/utils"
+	"github.com/google/uuid"
 )
 
 type Session struct {

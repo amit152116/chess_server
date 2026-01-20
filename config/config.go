@@ -2,9 +2,10 @@ package config
 
 import (
 	"fmt"
-	"github.com/Amit152116Kumar/chess_server/utils"
-	"github.com/joho/godotenv"
 	"os"
+
+	"github.com/amit152116/chess_server/utils"
+	"github.com/joho/godotenv"
 )
 
 type Configs struct {
@@ -22,6 +23,7 @@ type Configs struct {
 func (a *Configs) SetSSLMode(sslMode utils.SSLMode) {
 	a.SSLMode = sslMode.String()
 }
+
 func (a *Configs) GetConnectionString() string {
 	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		a.DBHost, a.DBPort, a.DBUser, a.DBPassword, a.DBName, a.SSLMode)
@@ -30,7 +32,6 @@ func (a *Configs) GetConnectionString() string {
 var Cfg *Configs
 
 func LoadConfig() error {
-
 	if err := godotenv.Load(); err != nil {
 		return err
 	}

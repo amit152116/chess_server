@@ -2,13 +2,14 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/Amit152116Kumar/chess_server/models"
-	"github.com/Amit152116Kumar/chess_server/redis"
-	"github.com/Amit152116Kumar/chess_server/services"
-	"github.com/Amit152116Kumar/chess_server/utils"
+	"net/http"
+
+	"github.com/amit152116/chess_server/models"
+	"github.com/amit152116/chess_server/redis"
+	"github.com/amit152116/chess_server/services"
+	"github.com/amit152116/chess_server/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"net/http"
 )
 
 func Login(c *gin.Context) {
@@ -29,7 +30,6 @@ func Login(c *gin.Context) {
 }
 
 func Register(c *gin.Context) {
-
 	var user models.RegisterUserPayload
 
 	if err := c.ShouldBind(&user); err != nil {

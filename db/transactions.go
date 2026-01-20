@@ -2,9 +2,10 @@ package db
 
 import (
 	"fmt"
-	"github.com/Amit152116Kumar/chess_server/models"
-	"github.com/Amit152116Kumar/chess_server/utils"
 	"time"
+
+	"github.com/amit152116/chess_server/models"
+	"github.com/amit152116/chess_server/utils"
 )
 
 func (db *Database) AddUser(user *models.RegisterUserPayload) error {
@@ -68,7 +69,6 @@ func (db *Database) DeleteGame(gameID int) error {
 }
 
 func (db *Database) UpdateGameStatus(gameID int, result utils.GameResult, winner *string) error {
-
 	if winner != nil {
 		_, err := db.conn.Exec(`UPDATE Games SET status = ?, winner_id = (SELECT id FROM Users WHERE username = ?) WHERE id = ?;`,
 			result.String(), *winner, gameID)

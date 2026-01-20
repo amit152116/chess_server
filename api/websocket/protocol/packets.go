@@ -3,8 +3,9 @@ package protocol
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/Amit152116Kumar/chess_server/movegen"
-	"github.com/Amit152116Kumar/chess_server/myErrors"
+
+	"github.com/amit152116/chess_server/movegen"
+	"github.com/amit152116/chess_server/myErrors"
 )
 
 type HeaderPacket struct {
@@ -22,7 +23,7 @@ func (h *HeaderPacket) Encode(color movegen.Color) ([]byte, error) {
 	if h.bodyLength > 0xFFFF {
 		return nil, myErrors.ErrBodyLenTooLarge
 	}
-	var lenByte = []byte{byte(h.bodyLength >> 8), byte(h.bodyLength & 0xFF)}
+	lenByte := []byte{byte(h.bodyLength >> 8), byte(h.bodyLength & 0xFF)}
 	if _, err := buffer.Write(lenByte); err != nil {
 		return nil, err
 	}

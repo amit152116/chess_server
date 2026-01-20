@@ -3,12 +3,15 @@ package redis
 import (
 	"context"
 	"fmt"
-	"github.com/Amit152116Kumar/chess_server/config"
+
+	"github.com/amit152116/chess_server/config"
 	"github.com/redis/go-redis/v9"
 )
 
-var Ctx = context.Background()
-var Client *redis.Client
+var (
+	Ctx    = context.Background()
+	Client *redis.Client
+)
 
 func ConfigureRedis() {
 	rdb := redis.NewClient(&redis.Options{

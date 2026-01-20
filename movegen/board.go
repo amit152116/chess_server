@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/Amit152116Kumar/chess_server/myErrors"
+	"github.com/amit152116/chess_server/myErrors"
 )
 
 type Board struct {
@@ -110,7 +110,7 @@ func (b *Board) GetFEN() string {
 	for rank := 7; rank >= 0; rank-- {
 		emptySqu := 0
 
-		for file := 0; file < 8; file++ {
+		for file := range 8 {
 			pos := rank*8 + file
 			pieceName, color := getNameAndColor(b.WhichPieceExists(byte(pos)))
 			if pieceName == 0 {
@@ -199,7 +199,7 @@ func (b *Board) GetAllMoves(attackOnly bool) map[int][]int {
 			continue
 		}
 
-		for i := 0; i < 64; i++ {
+		for i := range 64 {
 			var moveList []int
 			if attackOnly {
 				moveList = b.GetPartialMoves(pieceName, i, attackOnly)

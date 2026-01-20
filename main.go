@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/Amit152116Kumar/chess_server/cmd"
-	"github.com/Amit152116Kumar/chess_server/config"
-	"github.com/Amit152116Kumar/chess_server/utils"
 	"log"
+
+	"github.com/amit152116/chess_server/cmd"
+	"github.com/amit152116/chess_server/config"
+	"github.com/amit152116/chess_server/utils"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/Amit152116Kumar/chess_server/models"
+	"github.com/amit152116/chess_server/models"
 )
 
 func UpdateUser(user *models.User) error {
@@ -11,7 +11,6 @@ func UpdateUser(user *models.User) error {
 		}
 	}
 	if user.Username != "" {
-
 	}
 	return nil
 }
